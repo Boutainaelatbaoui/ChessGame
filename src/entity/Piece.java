@@ -20,5 +20,7 @@ public abstract class Piece {
         return killed;
     }
 
+    public abstract String getPieceSymbol();
+
 }
 
