@@ -66,8 +66,9 @@ public class ChessGame {
                 //continue;
             }
             //continue;
+        } else {
+            System.out.println("Invalid move format. Enter your move in the format 'source-destination'.");
         }
-        System.out.println("Invalid move format. Enter your move in the format 'source-destination'.");
 
             switchPlayer();
         //}
