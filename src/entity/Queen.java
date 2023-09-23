@@ -6,6 +6,6 @@ public class Queen extends Piece {
     }
     @Override
     public String getPieceSymbol() {
-        return "♛";
+        return "Q";
     }
 }

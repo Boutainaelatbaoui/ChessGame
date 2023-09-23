@@ -6,6 +6,6 @@ public class Bishop extends Piece {
     }
     @Override
     public String getPieceSymbol() {
-        return "♝";
+        return "B";
     }
 }

@@ -51,23 +51,23 @@ public class Board {
     }
 
     public void displayBoard() {
-        System.out.println("   a  b  c  d  e  f  g  h");
-        for (int i = 0; i < 8; i++) {
-            System.out.print(8 - i + " ");
-            for (int j = 0; j < 8; j++) {
-                Box box = boxes[i][j];
+        for (int row = 7; row >= 0; row--) {
+            System.out.print(row + 1 + " ");
+            for (int col = 0; col < 8; col++) {
+                Box box = boxes[row][col];
                 Piece piece = box.getPiece();
-
-                String pieceSymbol = piece != null ? piece.getPieceSymbol() : " .";
-                String backgroundColor = (i + j) % 2 == 0 ? "47" : "100";
-                String textColor = piece != null && piece.isWhite() ? "97" : "30";
-
-                String formattedSymbol = "\u001B[" + backgroundColor + ";" + textColor + "m " + pieceSymbol + " \u001B[0m";
-                System.out.print(formattedSymbol);
+                String color = (row + col) % 2 == 0 ? "47" : "100"; //color of background
+                if (piece == null) {
+                    System.out.print("\u001B[" + color + "m   \u001B[0m");
+                } else {
+                    String symbol = String.valueOf(piece.getPieceSymbol());
+                    String pieceColor = piece.isWhite() ? "97" : "30"; // color of piece
+                    System.out.print("\u001B[" + color + ";"+ pieceColor + "m " + symbol + " \u001B[0m");
+                }
             }
-            System.out.println(8 - i);
+            System.out.println();
         }
-        System.out.println("   a  b  c  d  e  f  g  h");
+        System.out.println("  a  b  c  d  e  f  g  h");
     }
 
 

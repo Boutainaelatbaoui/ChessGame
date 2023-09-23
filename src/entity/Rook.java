@@ -6,6 +6,6 @@ public class Rook extends Piece {
     }
     @Override
     public String getPieceSymbol() {
-        return "♜";
+        return "R";
     }
 }
