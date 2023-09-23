@@ -9,13 +9,13 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private Player currentPlayer;
+    Scanner scanner = new Scanner(System.in);
 
     public ChessGame() {
         board = new Board();
     }
 
     private Player createPlayer(int playerNumber, Color playerColor) {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Player " + playerNumber + ", please enter your name: ");
         String playerName = scanner.nextLine();
         return new Player(playerName, playerColor);
@@ -51,12 +51,34 @@ public class ChessGame {
         //while (!isGameOver()) {
             System.out.println(currentPlayer.getName() + "'s turn");
 
+            // Get move input from the current player
+            System.out.print("Enter your move (e.g., 'e2-e4'): ");
+            String moveInput = scanner.nextLine();
+
+        String[] moveParts = moveInput.split("-");
+
+        if (moveParts.length == 2) {
+            String sourceSquare = moveParts[0].trim();
+            String destinationSquare = moveParts[1].trim();
+
+            if (!isValidSquare(sourceSquare) || !isValidSquare(destinationSquare)) {
+                System.out.println("Invalid square(s). Make sure squares are in the format 'a1' to 'h8'.");
+                //continue;
+            }
+            //continue;
+        }
+        System.out.println("Invalid move format. Enter your move in the format 'source-destination'.");
+
             switchPlayer();
         //}
     }
 
     private void switchPlayer() {
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    }
+
+    private boolean isValidSquare(String square) {
+        return square.matches("[a-h][1-8]");
     }
 
     private boolean isGameOver() {
