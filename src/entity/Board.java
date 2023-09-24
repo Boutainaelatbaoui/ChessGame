@@ -6,7 +6,9 @@ public class Board {
     public Board() {
         initializeBoard();
     }
-
+    public Box getBox(int x, int y) {
+        return boxes[y][x];
+    }
     private void initializeBoard() {
         boxes = new Box[8][8];
 
@@ -70,6 +72,21 @@ public class Board {
         System.out.println("  a  b  c  d  e  f  g  h");
 
     }
+    public void applyMove(int startX, int startY, int endX, int endY) {
+        Box startBox = boxes[startY][startX];
+        Box endBox = boxes[endY][endX];
 
+        Piece sourcePiece = startBox.getPiece();
+        Piece destPiece = endBox.getPiece();
+
+        // Capture the opponent's piece if the destination square is occupied
+        if (destPiece != null) {
+            destPiece.setKilled(true);
+        }
+
+        // Move the piece to the destination square
+        endBox.setPiece(sourcePiece);
+        startBox.setPiece(null);
+    }
 
 }

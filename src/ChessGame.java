@@ -1,4 +1,6 @@
 import entity.Board;
+import entity.Box;
+import entity.Piece;
 import entity.Player;
 import enums.Color;
 
@@ -9,7 +11,8 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private Player currentPlayer;
-    Scanner scanner = new Scanner(System.in);
+    private Box[][] boxes;
+    private Scanner scanner = new Scanner(System.in);
 
     public ChessGame() {
         board = new Board();
@@ -48,30 +51,39 @@ public class ChessGame {
     }
 
     private void playGame() {
-        //while (!isGameOver()) {
+        while (!isGameOver()) {
             System.out.println(currentPlayer.getName() + "'s turn");
 
             // Get move input from the current player
             System.out.print("Enter your move (e.g., 'e2-e4'): ");
             String moveInput = scanner.nextLine();
 
-        String[] moveParts = moveInput.split("-");
+            String[] moveParts = moveInput.split("-");
 
-        if (moveParts.length == 2) {
+            if (moveParts.length != 2) {
+                System.out.println("Invalid move format. Enter your move in the format 'source-destination'.");
+                continue;
+            }
+
             String sourceSquare = moveParts[0].trim();
             String destinationSquare = moveParts[1].trim();
 
             if (!isValidSquare(sourceSquare) || !isValidSquare(destinationSquare)) {
                 System.out.println("Invalid square(s). Make sure squares are in the format 'a1' to 'h8'.");
-                //continue;
+                continue;
             }
-            //continue;
-        } else {
-            System.out.println("Invalid move format. Enter your move in the format 'source-destination'.");
-        }
+
+            int startX = sourceSquare.charAt(0) - 'a';
+            int startY = sourceSquare.charAt(1) - '1';
+            int endX = destinationSquare.charAt(0) - 'a';
+            int endY = destinationSquare.charAt(1) - '1';
+
+            board.applyMove(startX, startY, endX, endY);
+
+            board.displayBoard();
 
             switchPlayer();
-        //}
+        }
     }
 
     private void switchPlayer() {
@@ -83,6 +95,7 @@ public class ChessGame {
     }
 
     private boolean isGameOver() {
+        // Implement the game-over conditions (e.g., checkmate, stalemate, etc.)
         return false;
     }
 
