@@ -78,7 +78,7 @@ public class ChessGame {
             int endX = destinationSquare.charAt(0) - 'a';
             int endY = destinationSquare.charAt(1) - '1';
 
-            board.applyMove(startX, startY, endX, endY);
+            board.applyMove(startX, startY, endX, endY, currentPlayer);
 
             board.displayBoard();
 

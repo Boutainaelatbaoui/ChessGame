@@ -1,5 +1,7 @@
 package entity;
 
+import enums.Color;
+
 public class Board {
     private Box[][] boxes;
 
@@ -72,21 +74,36 @@ public class Board {
         System.out.println("  a  b  c  d  e  f  g  h");
 
     }
-    public void applyMove(int startX, int startY, int endX, int endY) {
+    public void applyMove(int startX, int startY, int endX, int endY, Player currentPlayer) {
         Box startBox = boxes[startY][startX];
         Box endBox = boxes[endY][endX];
 
         Piece sourcePiece = startBox.getPiece();
         Piece destPiece = endBox.getPiece();
 
-        // Capture the opponent's piece if the destination square is occupied
-        if (destPiece != null) {
-            destPiece.setKilled(true);
-        }
+        if (sourcePiece != null) {
+            boolean isWhitePiece = sourcePiece.isWhite();
+            boolean isCorrectColor = (isWhitePiece && currentPlayer.getColor() == Color.WHITE) ||
+                    (!isWhitePiece && currentPlayer.getColor() == Color.BLACK);
 
-        // Move the piece to the destination square
-        endBox.setPiece(sourcePiece);
-        startBox.setPiece(null);
+            if (isCorrectColor) {
+                if (sourcePiece.moveValid(startX, startY, endX, endY)) {
+                    // Capture the opponent's piece if the destination square is occupied
+                    if (destPiece != null) {
+                        destPiece.setKilled(true);
+                    }
+
+                    endBox.setPiece(sourcePiece);
+                    startBox.setPiece(null);
+                } else {
+                    System.out.println("Invalid move for this piece.");
+                }
+            } else {
+                System.out.println("Invalid move. Make sure you are moving your own piece.");
+            }
+        } else {
+            System.out.println("Invalid move. There is no piece at the source square.");
+        }
     }
 
 }
