@@ -8,7 +8,7 @@ public class Bishop extends Piece {
     public String getPieceSymbol() {
         return "B";
     }
-    public boolean moveValid(int startX, int startY, int endX, int endY) {
+    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
         int deltaX = Math.abs(endX - startX);
         int deltaY = endY - startY;
 

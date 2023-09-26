@@ -8,37 +8,23 @@ public class Queen extends Piece {
     public String getPieceSymbol() {
         return "Q";
     }
-    public boolean moveValid(int startX, int startY, int endX, int endY) {
-        int deltaX = Math.abs(endX - startX);
-        int deltaY = endY - startY;
+    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
+        int xChange = Math.abs(endX - startX);
+        int yChange = Math.abs(endY - startY);
 
-        // White pawn moves forward (up the board)
-        if (isWhite()) {
-            if (deltaY == 1 && deltaX == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (deltaY == 2 && deltaX == 0 && startY == 1) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (deltaY == 1 && deltaX == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
+        if (destPiece != null && destPiece.isWhite() == this.isWhite()) {
+            return false;
         }
-        // Black pawn moves forward (down the board)
-        else {
-            if (deltaY == -1 && deltaX == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (deltaY == -2 && deltaX == 0 && startY == 6) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (deltaY == -1 && deltaX == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
+
+        if (xChange == 0 && yChange > 0) {
+            return true;
+        } else if (yChange == 0 && xChange > 0) {
+            return true;
+        } else if (xChange == yChange && xChange > 0) {
+            return true;
         }
 
         return false;
     }
+
 }

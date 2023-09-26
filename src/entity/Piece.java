@@ -22,7 +22,7 @@ public abstract class Piece {
 
     public abstract String getPieceSymbol();
 
-    public abstract boolean moveValid(int startX, int startY, int endX, int endY);
+    public abstract boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece);
 
 }
 
