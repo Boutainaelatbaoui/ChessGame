@@ -82,7 +82,7 @@ public class ChessGame {
 
             if (moveSuccessful) {
                 board.displayBoard();
-                switchPlayer();
+                //switchPlayer();
             }
         }
     }

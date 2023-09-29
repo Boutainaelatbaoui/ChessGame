@@ -9,34 +9,16 @@ public class King extends Piece {
         return "K";
     }
     public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
-        int xChange = Math.abs(endX - startX);
-        int yChange = endY - startY;
+        int diffX = Math.abs(endX - startX);
+        int diffY = Math.abs(endY - startY);
 
-        if (isWhite()) {
-            if (yChange == 1 && xChange == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (yChange == 2 && xChange == 0 && startY == 1) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (yChange == 1 && xChange == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
-        }
-        else {
-            if (yChange == -1 && xChange == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (yChange == -2 && xChange == 0 && startY == 6) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (yChange == -1 && xChange == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
+        if (destPiece != null && destPiece.isWhite() == this.isWhite()) {
+            return false;
         }
 
+        if (diffX <= 1 && diffY <= 1) {
+            return true;
+        }
         return false;
     }
 }
