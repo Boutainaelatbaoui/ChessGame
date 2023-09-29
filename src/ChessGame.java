@@ -78,11 +78,12 @@ public class ChessGame {
             int endX = destinationSquare.charAt(0) - 'a';
             int endY = destinationSquare.charAt(1) - '1';
 
-            board.applyMove(startX, startY, endX, endY, currentPlayer);
+            boolean moveSuccessful = board.applyMove(startX, startY, endX, endY, currentPlayer);
 
-            board.displayBoard();
-
-            switchPlayer();
+            if (moveSuccessful) {
+                board.displayBoard();
+                switchPlayer();
+            }
         }
     }
 
@@ -95,7 +96,6 @@ public class ChessGame {
     }
 
     private boolean isGameOver() {
-        // Implement the game-over conditions (e.g., checkmate, stalemate, etc.)
         return false;
     }
 

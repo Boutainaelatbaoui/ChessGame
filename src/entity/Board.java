@@ -74,7 +74,7 @@ public class Board {
         System.out.println("  a  b  c  d  e  f  g  h");
 
     }
-    public void applyMove(int startX, int startY, int endX, int endY, Player currentPlayer) {
+    public boolean applyMove(int startX, int startY, int endX, int endY, Player currentPlayer) {
         Box startBox = boxes[startY][startX];
         Box endBox = boxes[endY][endX];
 
@@ -88,13 +88,13 @@ public class Board {
 
             if (isCorrectColor) {
                 if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece)) {
-                    // Capture the opponent's piece if the destination square is occupied
+                    // Capture the opponent's piece
                     if (destPiece != null) {
                         destPiece.setKilled(true);
                     }
-
                     endBox.setPiece(sourcePiece);
                     startBox.setPiece(null);
+                    return true;
                 } else {
                     System.out.println("Invalid move for this piece.");
                 }
@@ -104,6 +104,8 @@ public class Board {
         } else {
             System.out.println("Invalid move. There is no piece at the source square.");
         }
+        return false;
     }
+
 
 }
