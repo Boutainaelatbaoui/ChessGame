@@ -9,34 +9,15 @@ public class Knight extends Piece {
         return "N";
     }
     public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
-        int deltaX = Math.abs(endX - startX);
-        int deltaY = endY - startY;
+        int diffX = Math.abs(endX - startX);
+        int diffY = Math.abs(endY - startY);
 
-        // White pawn moves forward (up the board)
-        if (isWhite()) {
-            if (deltaY == 1 && deltaX == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (deltaY == 2 && deltaX == 0 && startY == 1) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (deltaY == 1 && deltaX == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
+        if (destPiece != null && destPiece.isWhite() == this.isWhite()) {
+            return false;
         }
-        // Black pawn moves forward (down the board)
-        else {
-            if (deltaY == -1 && deltaX == 0) {
-                // Pawn moves one square forward
-                return true;
-            } else if (deltaY == -2 && deltaX == 0 && startY == 6) {
-                // Pawn's first move, moving two squares forward
-                return true;
-            } else if (deltaY == -1 && deltaX == 1) {
-                // Pawn captures diagonally
-                return true;
-            }
+
+        if ((diffY == 2 && diffX == 1) || (diffX == 2 && diffY == 1)) {
+            return true;
         }
 
         return false;
