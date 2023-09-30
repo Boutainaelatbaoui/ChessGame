@@ -8,7 +8,7 @@ public class Rook extends Piece {
     public String getPieceSymbol() {
         return "R";
     }
-    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
+    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece, Box[][] boxes) {
         int xChange = Math.abs(endX - startX);
         int yChange = Math.abs(endY - startY);
 

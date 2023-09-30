@@ -8,7 +8,7 @@ public class King extends Piece {
     public String getPieceSymbol() {
         return "K";
     }
-    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece) {
+    public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece, Box[][] boxes) {
         int diffX = Math.abs(endX - startX);
         int diffY = Math.abs(endY - startY);
 

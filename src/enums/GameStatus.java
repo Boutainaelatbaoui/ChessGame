@@ -5,3 +5,4 @@ public enum GameStatus {
     WHITEWIN,
     BLACKWIN
 }
+

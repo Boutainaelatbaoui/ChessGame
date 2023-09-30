@@ -1,6 +1,7 @@
 package entity;
 
 import enums.Color;
+import enums.GameStatus;
 
 public class Board {
     private Box[][] boxes;
@@ -87,7 +88,7 @@ public class Board {
                     (!isWhitePiece && currentPlayer.getColor() == Color.BLACK);
 
             if (isCorrectColor) {
-                if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece)) {
+                if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
                     // Capture the opponent's piece
                     if (destPiece != null) {
                         destPiece.setKilled(true);
