@@ -17,6 +17,21 @@ public class Rook extends Piece {
         }
 
         if (xChange == 0 || yChange == 0) {
+            // Check for obstructions
+            int xStep = (xChange == 0) ? 0 : (endX > startX) ? 1 : -1;
+            int yStep = (yChange == 0) ? 0 : (endY > startY) ? 1 : -1;
+
+            int x = startX + xStep;
+            int y = startY + yStep;
+
+            while (x != endX || y != endY) {
+                if (boxes[y][x].getPiece() != null) {
+                    return false;
+                }
+                x += xStep;
+                y += yStep;
+            }
+
             return true;
         }
 
