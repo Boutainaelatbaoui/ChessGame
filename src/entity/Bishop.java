@@ -17,6 +17,19 @@ public class Bishop extends Piece {
         }
 
         if ((diffX == diffY)) {
+            int stepX = (endX > startX) ? 1 : -1;
+            int stepY = (endY > startY) ? 1 : -1;
+
+            int x = startX + stepX;
+            int y = startY + stepY;
+
+            while (x != endX || y != endY){
+                if (boxes[y][x].getPiece() != null) {
+                    return false;
+                }
+                x += stepX;
+                y += stepY;
+            }
             return true;
         }
 
