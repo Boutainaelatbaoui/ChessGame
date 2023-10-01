@@ -5,10 +5,20 @@ import enums.GameStatus;
 
 public class Board {
     private Box[][] boxes;
+    private GameStatus gameStatus;
 
     public Board() {
         initializeBoard();
     }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
     public Box getBox(int x, int y) {
         return boxes[y][x];
     }
@@ -91,6 +101,13 @@ public class Board {
                 if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
                     // Capture the opponent's piece
                     if (destPiece != null) {
+                        if (destPiece instanceof King && destPiece.isWhite()) {
+                            setGameStatus(GameStatus.BLACKWIN);
+                            System.out.println("The Black wins");
+                        }else {
+                            setGameStatus(GameStatus.WHITEWIN);
+                            System.out.println("The White wins");
+                        }
                         destPiece.setKilled(true);
                     }
                     endBox.setPiece(sourcePiece);

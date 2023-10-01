@@ -3,6 +3,7 @@ import entity.Box;
 import entity.Piece;
 import entity.Player;
 import enums.Color;
+import enums.GameStatus;
 
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private Player currentPlayer;
+
     private Box[][] boxes;
     private Scanner scanner = new Scanner(System.in);
 
@@ -96,6 +98,9 @@ public class ChessGame {
     }
 
     private boolean isGameOver() {
+        if (board.getGameStatus() == GameStatus.WHITEWIN || board.getGameStatus() == GameStatus.BLACKWIN) {
+            return true;
+        }
         return false;
     }
 
