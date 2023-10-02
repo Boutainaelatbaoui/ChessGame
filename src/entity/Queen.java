@@ -16,7 +16,7 @@ public class Queen extends Piece {
             return false;
         }
 
-        if ((diffX == 0 && diffY > 0) || (diffY == 0 && diffX > 0) || (diffX == diffY && diffX > 0)) {
+        if ((diffX == 0 && diffY > 0) || (diffY == 0 && diffX > 0) || (diffX == diffY)) {
             return true;
         }
 
