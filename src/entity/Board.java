@@ -101,14 +101,14 @@ public class Board {
                 if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
                     // Capture the opponent's piece
                     if (destPiece != null) {
+                        destPiece.setKilled(true);
                         if (destPiece instanceof King && destPiece.isWhite()) {
                             setGameStatus(GameStatus.BLACKWIN);
                             System.out.println("The Black wins");
-                        }else {
+                        }else if (destPiece instanceof King && !destPiece.isWhite()){
                             setGameStatus(GameStatus.WHITEWIN);
                             System.out.println("The White wins");
                         }
-                        destPiece.setKilled(true);
                     }
                     endBox.setPiece(sourcePiece);
                     startBox.setPiece(null);
