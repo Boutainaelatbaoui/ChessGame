@@ -110,8 +110,8 @@ public class Board {
                             System.out.println("The White wins");
                         }
                     }
-                    if (!performCastling(startX, startY)){
-                        return false;
+                    if (performCastling(startX, startY)){
+                        return true;
                     }
                     endBox.setPiece(sourcePiece);
                     startBox.setPiece(null);
