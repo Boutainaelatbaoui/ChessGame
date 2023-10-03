@@ -98,6 +98,9 @@ public class Board {
                     (!isWhitePiece && currentPlayer.getColor() == Color.BLACK);
 
             if (isCorrectColor) {
+                if (performCastling(startX, startY, endX, endY)){
+                    return true;
+                }
                 if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
                     // Capture the opponent's piece
                     if (destPiece != null) {
@@ -109,9 +112,6 @@ public class Board {
                             setGameStatus(GameStatus.WHITEWIN);
                             System.out.println("The White wins");
                         }
-                    }
-                    if (performCastling(startX, startY)){
-                        return true;
                     }
                     endBox.setPiece(sourcePiece);
                     startBox.setPiece(null);
@@ -127,7 +127,7 @@ public class Board {
         }
         return false;
     }
-    public boolean performCastling(int kingX, int kingY) {
+    public boolean performCastling(int kingX, int kingY, int endX, int endY) {
         Piece kingPiece = boxes[kingY][kingX].getPiece();
 
         if (kingPiece instanceof King) {
