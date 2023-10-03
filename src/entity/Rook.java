@@ -31,7 +31,9 @@ public class Rook extends Piece {
                 x += xStep;
                 y += yStep;
             }
-
+            if (isFirstMove) {
+                setFirstMove(isFirstMove);
+            }
             return true;
         }
 

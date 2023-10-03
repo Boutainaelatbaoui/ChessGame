@@ -110,6 +110,9 @@ public class Board {
                             System.out.println("The White wins");
                         }
                     }
+                    if (!performCastling(startX, startY)){
+                        return false;
+                    }
                     endBox.setPiece(sourcePiece);
                     startBox.setPiece(null);
                     return true;
@@ -122,6 +125,39 @@ public class Board {
         } else {
             System.out.println("Invalid move. There is no piece at the source square.");
         }
+        return false;
+    }
+    public boolean performCastling(int kingX, int kingY) {
+        Piece kingPiece = boxes[kingY][kingX].getPiece();
+
+        if (kingPiece instanceof King) {
+            King king = (King) kingPiece;
+
+            int rookX;
+            int rookY = kingY;
+
+            if (kingX == 4 && kingY == 0) {
+                rookX = 7;
+            }else if (kingX == 4 && kingY == 7) {
+                rookX = 0;
+            }else {
+                return false;
+            }
+
+            Piece rookPiece = boxes[rookY][rookX].getPiece();
+
+            if (king.isFirstMove() && rookPiece instanceof Rook && rookPiece.isFirstMove()) {
+                    boxes[kingY][kingX].setPiece(null);
+                    boxes[kingY][rookX].setPiece(king);
+                    boxes[kingY][kingX + (rookX > kingX ? 2 : -2)].setPiece(rookPiece);
+
+                    king.setFirstMove(false);
+                    rookPiece.setFirstMove(false);
+
+                    return true;
+                }
+            }
+
         return false;
     }
 
