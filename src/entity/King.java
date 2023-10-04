@@ -11,7 +11,6 @@ public class King extends Piece {
     public boolean moveValid(int startX, int startY, int endX, int endY, Piece destPiece, Box[][] boxes) {
         int diffX = Math.abs(endX - startX);
         int diffY = Math.abs(endY - startY);
-        System.out.println(isFirstMove);
         if (destPiece != null && destPiece.isWhite() == this.isWhite()) {
             return false;
         }
@@ -20,7 +19,6 @@ public class King extends Piece {
             if (isFirstMove) {
                 setFirstMove(isFirstMove);
             }
-            System.out.println(isFirstMove);
             return true;
         }
         return false;

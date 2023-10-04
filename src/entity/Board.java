@@ -100,8 +100,7 @@ public class Board {
             if (isCorrectColor) {
                 if (performCastling(startX, startY, endX, endY)){
                     return true;
-                }
-                if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
+                } else if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
                     // Capture the opponent's piece
                     if (destPiece != null) {
                         destPiece.setKilled(true);
@@ -146,28 +145,26 @@ public class Board {
         Piece kingPiece = boxes[kingY][kingX].getPiece();
 
         if (kingPiece instanceof King) {
-            King king = (King) kingPiece;
-
-            int rookX;
-            int rookY = kingY;
-
-            if (kingX == 4 && kingY == 0) {
-                rookX = 7;
-            } else if (kingX == 4 && kingY == 7) {
-                rookX = 0;
-            } else {
-                return false;
-            }
+            int rookX = endX;
+            int rookY = endY;
 
             Piece rookPiece = boxes[rookY][rookX].getPiece();
 
-            if (endX == rookX && endY == rookY && king.isFirstMove() && rookPiece instanceof Rook && rookPiece.isFirstMove()) {
+            if (kingPiece.isFirstMove() && rookPiece instanceof Rook && rookPiece.isFirstMove()) {
                 if (!arePiecesBetween(kingX, rookX, kingY)) {
-                    boxes[kingY][kingX].setPiece(null);
-                    boxes[kingY][rookX].setPiece(king);
-                    boxes[kingY][kingX + (rookX > kingX ? 2 : -2)].setPiece(rookPiece);
+                    if (rookX == 0) {
+                        boxes[kingY][kingX].setPiece(null);
+                        boxes[kingY][rookX].setPiece(null);
+                        boxes[kingY][kingX - 2].setPiece(kingPiece);
+                        boxes[kingY][kingX - 1].setPiece(rookPiece);
+                    } else {
+                        boxes[kingY][kingX].setPiece(null);
+                        boxes[kingY][rookX].setPiece(null);
+                        boxes[kingY][kingX + 2].setPiece(kingPiece);
+                        boxes[kingY][kingX + 1].setPiece(rookPiece);
+                    }
 
-                    king.setFirstMove(false);
+                    kingPiece.setFirstMove(false);
                     rookPiece.setFirstMove(false);
 
                     return true;
