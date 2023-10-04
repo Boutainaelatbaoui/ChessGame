@@ -101,19 +101,25 @@ public class Board {
                 if (performCastling(startX, startY, endX, endY)){
                     return true;
                 } else if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
-                    // Capture the opponent's piece
-                    if (destPiece != null) {
-                        destPiece.setKilled(true);
-                        if (destPiece instanceof King && destPiece.isWhite()) {
-                            setGameStatus(GameStatus.BLACKWIN);
-                            System.out.println("The Black wins");
-                        }else if (destPiece instanceof King && !destPiece.isWhite()){
-                            setGameStatus(GameStatus.WHITEWIN);
-                            System.out.println("The White wins");
+                    boolean isKingInCheck = isKingInCheck(isWhitePiece, boxes);
+                    if (!isKingInCheck) {
+                        // Capture the opponent's piece
+                        if (destPiece != null) {
+                            destPiece.setKilled(true);
+                            if (destPiece instanceof King && destPiece.isWhite()) {
+                                setGameStatus(GameStatus.BLACKWIN);
+                                System.out.println("The Black wins");
+                            } else if (destPiece instanceof King && !destPiece.isWhite()) {
+                                setGameStatus(GameStatus.WHITEWIN);
+                                System.out.println("The White wins");
+                            }
                         }
+                        endBox.setPiece(sourcePiece);
+                        startBox.setPiece(null);
+                        return true;
+                    } else {
+                        System.out.println("Invalid move. Your king is in check.");
                     }
-                    endBox.setPiece(sourcePiece);
-                    startBox.setPiece(null);
                     return true;
                 } else {
                     System.out.println("Invalid move for this piece.");
@@ -176,8 +182,8 @@ public class Board {
     }
 
     private boolean isKingInCheck(boolean isWhite, Box[][] boxes) {
-        int kingX = -1;
-        int kingY = -1;
+        int kingX = 9;
+        int kingY = 9;
 
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
@@ -190,7 +196,7 @@ public class Board {
             }
         }
 
-        if (kingX == -1 || kingY == -1) {
+        if (kingX == 9 || kingY == 9) {
             return false;
         }
 
