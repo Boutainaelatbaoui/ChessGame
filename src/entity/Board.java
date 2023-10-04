@@ -175,4 +175,38 @@ public class Board {
         return false;
     }
 
+    private boolean isKingInCheck(boolean isWhite, Box[][] boxes) {
+        int kingX = -1;
+        int kingY = -1;
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Piece piece = boxes[y][x].getPiece();
+                if (piece instanceof King && piece.isWhite() == isWhite) {
+                    kingX = x;
+                    kingY = y;
+                    break;
+                }
+            }
+        }
+
+        if (kingX == -1 || kingY == -1) {
+            return false;
+        }
+
+        // Check if the king is under threat
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Piece piece = boxes[y][x].getPiece();
+                if (piece != null && piece.isWhite() != isWhite) {
+                    if (piece.moveValid(x, y, kingX, kingY, null, boxes)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
