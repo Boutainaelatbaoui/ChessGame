@@ -127,6 +127,21 @@ public class Board {
         }
         return false;
     }
+    private boolean arePiecesBetween(int startX, int endX, int startY) {
+        int xStep = (endX > startX) ? 1 : (endX < startX) ? -1 : 0;
+
+        int x = startX + xStep;
+
+        while (x != endX)  {
+            if (boxes[startY][x].getPiece() != null) {
+                return true;
+            }
+            x += xStep;
+        }
+
+        return false;
+    }
+
     public boolean performCastling(int kingX, int kingY, int endX, int endY) {
         Piece kingPiece = boxes[kingY][kingX].getPiece();
 
@@ -146,21 +161,21 @@ public class Board {
 
             Piece rookPiece = boxes[rookY][rookX].getPiece();
 
-            // Check if endX and endY represent the coordinates of the rook piece
             if (endX == rookX && endY == rookY && king.isFirstMove() && rookPiece instanceof Rook && rookPiece.isFirstMove()) {
-                boxes[kingY][kingX].setPiece(null);
-                boxes[kingY][rookX].setPiece(king);
-                boxes[kingY][kingX + (rookX > kingX ? 2 : -2)].setPiece(rookPiece);
+                if (!arePiecesBetween(kingX, rookX, kingY)) {
+                    boxes[kingY][kingX].setPiece(null);
+                    boxes[kingY][rookX].setPiece(king);
+                    boxes[kingY][kingX + (rookX > kingX ? 2 : -2)].setPiece(rookPiece);
 
-                king.setFirstMove(false);
-                rookPiece.setFirstMove(false);
+                    king.setFirstMove(false);
+                    rookPiece.setFirstMove(false);
 
-                return true;
+                    return true;
+                }
             }
         }
 
         return false;
     }
-
 
 }
