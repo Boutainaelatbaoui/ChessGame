@@ -120,7 +120,6 @@ public class Board {
                     } else {
                         System.out.println("Invalid move. Your king is in check.");
                     }
-                    return true;
                 } else {
                     System.out.println("Invalid move for this piece.");
                 }
