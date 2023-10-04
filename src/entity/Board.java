@@ -118,7 +118,18 @@ public class Board {
                         startBox.setPiece(null);
                         return true;
                     } else {
-                        System.out.println("Invalid move. Your king is in check.");
+                        boolean hasValidMoves = hasValidMoves(isWhitePiece, boxes);
+                        if (!hasValidMoves) {
+                            if (isWhitePiece) {
+                                setGameStatus(GameStatus.BLACKWIN);
+                                System.out.println("The Black wins");
+                            } else {
+                                setGameStatus(GameStatus.WHITEWIN);
+                                System.out.println("The White wins");
+                            }
+                        } else {
+                            System.out.println("Invalid move. Your king is in check.");
+                        }
                     }
                 } else {
                     System.out.println("Invalid move for this piece.");
@@ -128,6 +139,45 @@ public class Board {
             }
         } else {
             System.out.println("Invalid move. There is no piece at the source square.");
+        }
+        return false;
+    }
+
+    private boolean hasValidMoves(boolean isWhite, Box[][] boxes) {
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Piece piece = boxes[y][x].getPiece();
+                if (piece != null && piece.isWhite() == isWhite) {
+                    if (hasValidMove(x, y, boxes)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasValidMove(int startX, int startY, Box[][] boxes) {
+        Piece sourcePiece = boxes[startY][startX].getPiece();
+        for (int endY = 0; endY < 8; endY++) {
+            for (int endX = 0; endX < 8; endX++) {
+                if (sourcePiece.moveValid(startX, startY, endX, endY, boxes[endY][endX].getPiece(), boxes)) {
+                    // Simulate the move
+                    boxes[startY][startX].setPiece(null);
+                    boxes[endY][endX].setPiece(sourcePiece);
+
+                    // Check if the king is in check after the move
+                    boolean isKingInCheck = isKingInCheck(sourcePiece.isWhite(), boxes);
+
+                    // Undo the move
+                    boxes[startY][startX].setPiece(sourcePiece);
+                    boxes[endY][endX].setPiece(null);
+
+                    if (!isKingInCheck) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
