@@ -3,12 +3,16 @@ package entity;
 import enums.Color;
 import enums.GameStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 public class Board {
     private Box[][] boxes;
     private GameStatus gameStatus;
+
+    //public List<Piece> pieces = new ArrayList();
 
     public Board() {
         initializeBoard();
@@ -100,20 +104,24 @@ public class Board {
                 if (performCastling(startX, startY, endX, endY)){
                     return true;
                 } else if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
-
-                    if (destPiece != null) {
-                        destPiece.setKilled(true);
-                        if (destPiece instanceof King && destPiece.isWhite()) {
-                            setGameStatus(GameStatus.BLACKWIN);
-                            System.out.println("The Black wins");
-                        }else if (destPiece instanceof King && !destPiece.isWhite()){
-                            setGameStatus(GameStatus.WHITEWIN);
-                            System.out.println("The White wins");
+                    if (!isKingInCheck(isCorrectColor, boxes)) {
+                        // Capture piece
+                        if (destPiece != null) {
+                            destPiece.setKilled(true);
+                            if (destPiece instanceof King && destPiece.isWhite()) {
+                                setGameStatus(GameStatus.BLACKWIN);
+                                System.out.println("The Black wins");
+                            } else if (destPiece instanceof King && !destPiece.isWhite()) {
+                                setGameStatus(GameStatus.WHITEWIN);
+                                System.out.println("The White wins");
+                            }
                         }
+                        endBox.setPiece(sourcePiece);
+                        startBox.setPiece(null);
+                        return true;
+                    } else {
+                        System.out.println("Invalid move. Your king is in check.");
                     }
-                    endBox.setPiece(sourcePiece);
-                    startBox.setPiece(null);
-                    return true;
                 } else {
                     System.out.println("Invalid move for this piece.");
                 }
@@ -140,7 +148,6 @@ public class Board {
                 }
             }
         }
-
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 Piece piece = boxes[y][x].getPiece();
