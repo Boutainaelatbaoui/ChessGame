@@ -3,6 +3,8 @@ package entity;
 import enums.Color;
 import enums.GameStatus;
 
+import java.util.Optional;
+
 public class Board {
     private Box[][] boxes;
     private GameStatus gameStatus;
@@ -88,49 +90,33 @@ public class Board {
     public boolean applyMove(int startX, int startY, int endX, int endY, Player currentPlayer) {
         Box startBox = boxes[startY][startX];
         Box endBox = boxes[endY][endX];
-
         Piece sourcePiece = startBox.getPiece();
         Piece destPiece = endBox.getPiece();
 
-        if (sourcePiece != null) {
+        Optional <Piece> sourcePieceOptional = Optional.ofNullable(sourcePiece);
+
+        if (sourcePieceOptional.isPresent()) {
             boolean isWhitePiece = sourcePiece.isWhite();
             boolean isCorrectColor = (isWhitePiece && currentPlayer.getColor() == Color.WHITE) ||
                     (!isWhitePiece && currentPlayer.getColor() == Color.BLACK);
-
             if (isCorrectColor) {
                 if (performCastling(startX, startY, endX, endY)){
                     return true;
                 } else if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
-                    boolean isKingInCheck = isKingInCheck(isWhitePiece, boxes);
-                    if (!isKingInCheck) {
-                        // Capture the opponent's piece
-                        if (destPiece != null) {
-                            destPiece.setKilled(true);
-                            if (destPiece instanceof King && destPiece.isWhite()) {
-                                setGameStatus(GameStatus.BLACKWIN);
-                                System.out.println("The Black wins");
-                            } else if (destPiece instanceof King && !destPiece.isWhite()) {
-                                setGameStatus(GameStatus.WHITEWIN);
-                                System.out.println("The White wins");
-                            }
-                        }
-                        endBox.setPiece(sourcePiece);
-                        startBox.setPiece(null);
-                        return true;
-                    } else {
-                        boolean hasValidMoves = hasValidMoves(isWhitePiece, boxes);
-                        if (!hasValidMoves) {
-                            if (isWhitePiece) {
-                                setGameStatus(GameStatus.BLACKWIN);
-                                System.out.println("The Black wins");
-                            } else {
-                                setGameStatus(GameStatus.WHITEWIN);
-                                System.out.println("The White wins");
-                            }
-                        } else {
-                            System.out.println("Invalid move. Your king is in check.");
+
+                    if (destPiece != null) {
+                        destPiece.setKilled(true);
+                        if (destPiece instanceof King && destPiece.isWhite()) {
+                            setGameStatus(GameStatus.BLACKWIN);
+                            System.out.println("The Black wins");
+                        }else if (destPiece instanceof King && !destPiece.isWhite()){
+                            setGameStatus(GameStatus.WHITEWIN);
+                            System.out.println("The White wins");
                         }
                     }
+                    endBox.setPiece(sourcePiece);
+                    startBox.setPiece(null);
+                    return true;
                 } else {
                     System.out.println("Invalid move for this piece.");
                 }
@@ -143,6 +129,34 @@ public class Board {
         return false;
     }
 
+    private boolean isKingInCheck(boolean isWhite, Box[][] boxes) {
+        int kingX = 1;
+        int kingY = 1;
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Piece piece = boxes[y][x].getPiece();
+                if (piece instanceof King && piece.isWhite() == isWhite) {
+                    kingX = x;
+                    kingY = y;
+                    break;
+                }
+            }
+        }
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Piece piece = boxes[y][x].getPiece();
+                if (piece != null && piece.isWhite() != isWhite) {
+                    if (piece.moveValid(x, y, kingX, kingY, null, boxes)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
     private boolean hasValidMoves(boolean isWhite, Box[][] boxes) {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
@@ -162,14 +176,13 @@ public class Board {
         for (int endY = 0; endY < 8; endY++) {
             for (int endX = 0; endX < 8; endX++) {
                 if (sourcePiece.moveValid(startX, startY, endX, endY, boxes[endY][endX].getPiece(), boxes)) {
-                    // Simulate the move
+                    // Simulate
                     boxes[startY][startX].setPiece(null);
                     boxes[endY][endX].setPiece(sourcePiece);
 
-                    // Check if the king is in check after the move
                     boolean isKingInCheck = isKingInCheck(sourcePiece.isWhite(), boxes);
 
-                    // Undo the move
+                    // Undo
                     boxes[startY][startX].setPiece(sourcePiece);
                     boxes[endY][endX].setPiece(null);
 
@@ -229,39 +242,4 @@ public class Board {
 
         return false;
     }
-
-    private boolean isKingInCheck(boolean isWhite, Box[][] boxes) {
-        int kingX = 9;
-        int kingY = 9;
-
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                Piece piece = boxes[y][x].getPiece();
-                if (piece instanceof King && piece.isWhite() == isWhite) {
-                    kingX = x;
-                    kingY = y;
-                    break;
-                }
-            }
-        }
-
-        if (kingX == 9 || kingY == 9) {
-            return false;
-        }
-
-        // Check if the king is under threat
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                Piece piece = boxes[y][x].getPiece();
-                if (piece != null && piece.isWhite() != isWhite) {
-                    if (piece.moveValid(x, y, kingX, kingY, null, boxes)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
 }
