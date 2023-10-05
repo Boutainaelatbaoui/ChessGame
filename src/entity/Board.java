@@ -4,6 +4,7 @@ import enums.Color;
 import enums.GameStatus;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class Board {
     private Box[][] boxes;
@@ -47,9 +48,7 @@ public class Board {
         boxes[7][6] = new Box(7, 6, new Knight(false));
         boxes[7][7] = new Box(7, 7, new Rook(false));
 
-        for (int i = 0; i < 8; i++) {
-            boxes[6][i] = new Box(6, i, new Pawn(false));
-        }
+        IntStream.range(0, 8).forEach(i -> boxes[6][i] = new Box(6, i, new Pawn(false)));
     }
 
     private void setUpWhitePieces() {
@@ -62,9 +61,7 @@ public class Board {
         boxes[0][6] = new Box(0, 6, new Knight(true));
         boxes[0][7] = new Box(0, 7, new Rook(true));
 
-        for (int i = 0; i < 8; i++) {
-            boxes[1][i] = new Box(6, i, new Pawn(true));
-        }
+        IntStream.range(0, 8).forEach(i -> boxes[1][i] = new Box(1, i, new Pawn(true)));
     }
 
     public void displayBoard() {
