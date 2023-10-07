@@ -5,6 +5,7 @@ import entity.Player;
 import enums.Color;
 import enums.GameStatus;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ChessGame {

@@ -4,15 +4,16 @@ import enums.Color;
 import enums.GameStatus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Board {
     private Box[][] boxes;
     private GameStatus gameStatus;
-
-    //public List<Piece> pieces = new ArrayList();
 
     public Board() {
         initializeBoard();
@@ -24,10 +25,6 @@ public class Board {
 
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
-    }
-
-    public Box getBox(int x, int y) {
-        return boxes[y][x];
     }
     private void initializeBoard() {
         boxes = new Box[8][8];
@@ -41,7 +38,6 @@ public class Board {
         setUpBlackPieces();
         setUpWhitePieces();
     }
-
     private void setUpBlackPieces() {
         boxes[7][0] = new Box(7, 0, new Rook(false));
         boxes[7][1] = new Box(7, 1, new Knight(false));
@@ -52,9 +48,9 @@ public class Board {
         boxes[7][6] = new Box(7, 6, new Knight(false));
         boxes[7][7] = new Box(7, 7, new Rook(false));
 
-        IntStream.range(0, 8).forEach(i -> boxes[6][i] = new Box(6, i, new Pawn(false)));
-    }
+        IntStream.range(0,8).forEach(i -> boxes[6][i] = new Box(6, i, new Pawn(false)));
 
+    }
     private void setUpWhitePieces() {
         boxes[0][0] = new Box(0, 0, new Rook(true));
         boxes[0][1] = new Box(0, 1, new Knight(true));
@@ -67,7 +63,6 @@ public class Board {
 
         IntStream.range(0, 8).forEach(i -> boxes[1][i] = new Box(1, i, new Pawn(true)));
     }
-
     public void displayBoard() {
         for (int row = 7; row >= 0; row--) {
             System.out.print(row + 1 + " ");
@@ -86,7 +81,6 @@ public class Board {
             System.out.println();
         }
         System.out.println("  a  b  c  d  e  f  g  h");
-
     }
     public boolean applyMove(int startX, int startY, int endX, int endY, Player currentPlayer) {
         Box startBox = boxes[startY][startX];
@@ -161,43 +155,7 @@ public class Board {
 
         return false;
     }
-    private boolean hasValidMoves(boolean isWhite, Box[][] boxes) {
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                Piece piece = boxes[y][x].getPiece();
-                if (piece != null && piece.isWhite() == isWhite) {
-                    if (hasValidMove(x, y, boxes)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
-    private boolean hasValidMove(int startX, int startY, Box[][] boxes) {
-        Piece sourcePiece = boxes[startY][startX].getPiece();
-        for (int endY = 0; endY < 8; endY++) {
-            for (int endX = 0; endX < 8; endX++) {
-                if (sourcePiece.moveValid(startX, startY, endX, endY, boxes[endY][endX].getPiece(), boxes)) {
-                    // Simulate
-                    boxes[startY][startX].setPiece(null);
-                    boxes[endY][endX].setPiece(sourcePiece);
-
-                    boolean isKingInCheck = isKingInCheck(sourcePiece.isWhite(), boxes);
-
-                    // Undo
-                    boxes[startY][startX].setPiece(sourcePiece);
-                    boxes[endY][endX].setPiece(null);
-
-                    if (!isKingInCheck) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
     private boolean arePiecesBetween(int startX, int endX, int startY) {
         int xStep = (endX > startX) ? 1 : (endX < startX) ? -1 : 0;
 
