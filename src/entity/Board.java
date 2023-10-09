@@ -3,13 +3,8 @@ package entity;
 import enums.Color;
 import enums.GameStatus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Board {
     private Box[][] boxes;
@@ -98,6 +93,9 @@ public class Board {
                 if (performCastling(startX, startY, endX, endY)){
                     return true;
                 } else if (sourcePiece.moveValid(startX, startY, endX, endY, destPiece, boxes)) {
+                    if (promoteToQueen(startX, startY, endX, endY)){
+                        return true;
+                    }
                     if (!isKingInCheck(isCorrectColor, boxes)) {
                         // Capture piece
                         if (destPiece != null) {
@@ -128,6 +126,25 @@ public class Board {
         return false;
     }
 
+    public boolean promoteToQueen(int startX, int startY, int endX, int endY){
+        Piece pawn = boxes[startY][startX].getPiece();
+        if(pawn instanceof Pawn){
+            if(pawn.isWhite()){
+                if(endY == 7){
+                    boxes[endY][endX].setPiece(new Queen(true));
+                    boxes[startY][startX].setPiece(null);
+                    return true;
+                }
+            }else {
+                if(endY == 0){
+                    boxes[endY][endX].setPiece(new Queen(false));
+                    boxes[startY][startX].setPiece(null);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     private boolean isKingInCheck(boolean isWhite, Box[][] boxes) {
         int kingX = 1;
         int kingY = 1;
